@@ -1,15 +1,46 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import OrangeButton from "../../../../components/Button";
 import LogoHorizontalLaranja from "../../../../components/LogoHorizontalLaranja";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../services/axios";
 
 const PaginaCadastro: React.FC = () => {
   const router = useRouter();
+  const { setToken } = useAuth();
 
-  const handleBackToHome = () => {
-    router.push("/qrcode");
+  const [formData, setFormData] = useState({
+    nomeCompleto: "",
+    email: "",
+    periodo: "",
+    curso: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleBackToHome = async () => {
+    try {
+      const response = await api.post("/usuario", {
+        nome: formData.nomeCompleto,
+        email: formData.email,
+        periodo: formData.periodo,
+        curso: formData.curso,
+      });
+
+      const { token } = response.data; // Supondo que o backend retorna um token
+      setToken(token);
+
+      console.log("Usuário cadastrado com sucesso:", response.data);
+      router.push("/qrcode");
+    } catch (error: any) {
+      console.error("Erro ao cadastrar usuário:", error.response?.data || error.message);
+      alert("Erro ao cadastrar. Tente novamente.");
+    }
   };
 
   return (
@@ -36,6 +67,8 @@ const PaginaCadastro: React.FC = () => {
           id="nomeCompleto"
           name="nomeCompleto"
           placeholder="Digite seu nome completo"
+          value={formData.nomeCompleto}
+          onChange={handleChange}
           className="border-4 border-gray-400 bg-transparent text-black px-4 py-8 rounded-xl w-full text-4xl"
         />
       </div>
@@ -49,6 +82,8 @@ const PaginaCadastro: React.FC = () => {
           id="email"
           name="email"
           placeholder="Digite seu e-mail"
+          value={formData.email}
+          onChange={handleChange}
           className="border-4 border-gray-400 bg-transparent text-black px-4 py-8 rounded-xl w-full text-4xl"
         />
       </div>
@@ -63,6 +98,8 @@ const PaginaCadastro: React.FC = () => {
             id="periodo"
             name="periodo"
             placeholder="Digite o período"
+            value={formData.periodo}
+            onChange={handleChange}
             className="border-4 border-gray-400 bg-transparent text-black px-4 py-8 rounded-xl w-1/2 text-4xl"
           />
           <input
@@ -70,6 +107,8 @@ const PaginaCadastro: React.FC = () => {
             id="curso"
             name="curso"
             placeholder="Digite o curso"
+            value={formData.curso}
+            onChange={handleChange}
             className="border-4 border-gray-400 bg-transparent text-black px-4 py-8 rounded-xl w-1/2 text-4xl"
           />
         </div>
