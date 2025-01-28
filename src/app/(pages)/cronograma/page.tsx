@@ -9,7 +9,7 @@ const PaginaCadastro: React.FC = () => {
   const router = useRouter();
 
   const handleBackToHome = () => {
-    router.push("/");
+    router.push("/questionario");
   };
 
   return (
