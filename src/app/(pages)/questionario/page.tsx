@@ -7,6 +7,13 @@ import { useRouter } from "next/navigation";
 import api from "@/app/services/axios";
 import PaginaAtual from "@/components/PaginaAtual";
 
+type respostaId = {
+  id: number;
+  texto: string;
+}
+
+type listRespostaId = respostaId[];
+
 const Questionario: React.FC = () => {
   const router = useRouter();
   const usuarioId = 1; // pegar qual usuario esta logado no momento
@@ -21,7 +28,7 @@ const Questionario: React.FC = () => {
 
   const [idAtual, setIdAtual] = useState(0); // id da pergunta atual
   const [pergunta, setPergunta] = useState(""); // texto da pergunta recebida
-  const [respostas, setRespostas] = useState([]); // lista com o texto das respostas
+  const [respostas, setRespostas] = useState<listRespostaId>([]); // lista com o texto das respostas
 
   const handleNextStep = ()=>{
     setIdAtual(idAtual+1);
@@ -35,7 +42,8 @@ const Questionario: React.FC = () => {
 
   useEffect(() =>{
     console.log(dados);
-  }, [dados])
+    console.log(respostas);
+  }, [dados, respostas])
 
   // Faz a requisição das perguntas apenas uma vez
   useEffect(() => {
@@ -72,8 +80,11 @@ const Questionario: React.FC = () => {
 
       setPergunta(perguntaRecebida?.pergunta || ""); // Atualiza o texto da pergunta
       setRespostas(
-        perguntaRecebida?.respostas.map((r: any) => r.texto_resposta) || []
-      ); // Atualiza as respostas
+        perguntaRecebida?.respostas.map((r: any) => ({
+          texto: r.texto_resposta,
+          id: r.id,
+        })) || []
+      );
     }
   }, [idAtual, todasPerguntas]); // Executa quando `idAtual` ou `todasPerguntas` mudar
 
