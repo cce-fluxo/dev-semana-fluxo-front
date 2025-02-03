@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import OrangeButton from "../../../../components/Button";
-import LogoHorizontalLaranja from "../../../../components/LogoHorizontalLaranja";
+import OrangeButton from "../../../components/Button";
+import LogoHorizontalLaranja from "../../../components/LogoHorizontalLaranja";
 import { useRouter } from "next/navigation";
 
 const PaginaCadastro: React.FC = () => {

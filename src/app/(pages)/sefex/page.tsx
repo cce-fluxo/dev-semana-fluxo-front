@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import OrangeButton from "../../../../components/Button";
+import OrangeButton from "../../../components/Button";
 
 const PaginaPrincipal: React.FC = () => {
   const router = useRouter();
