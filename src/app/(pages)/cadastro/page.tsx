@@ -30,7 +30,7 @@ const PaginaCadastro: React.FC = () => {
         email: formData.email,
         periodo: formData.periodo,
         curso: formData.curso,
-      });
+      }); //KKKKKKKKKKK mt feio kkkkkkkkkkk
 
       const { token } = response.data; // Supondo que o backend retorna um token
       setToken(token);
