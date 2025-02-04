@@ -10,9 +10,15 @@ import PaginaAtual from "@/components/PaginaAtual";
 type respostaId = {
   id: number;
   texto: string;
-}
+};
+
+type respostaPergunta = {
+  idResolvida: number;
+  idResposta: number;
+};
 
 type listRespostaId = respostaId[];
+type listRespostaPergunta = respostaPergunta[];
 
 const Questionario: React.FC = () => {
   const router = useRouter();
@@ -27,15 +33,82 @@ const Questionario: React.FC = () => {
   });
 
   const [idAtual, setIdAtual] = useState(0); // id da pergunta atual
+  
   const [pergunta, setPergunta] = useState(""); // texto da pergunta recebida
   const [respostas, setRespostas] = useState<listRespostaId>([]); // lista com o texto das respostas
+  const [jaResolvidas, setJaResolvidas] = useState<listRespostaPergunta>([]);
 
-  const handleNextStep = ()=>{
-    setIdAtual(idAtual+1);
+  const handleNextStep = (newData: any) => {
+    setDados((prev: any) => {
+      // Atualiza a resposta da pergunta atual
+      const updatedRespostas = prev.respostas.map((resposta:any, index:number) => {
+        // Se o índice da resposta for o idAtual, atualiza com newData
+        if (index === idAtual) {
+          return {
+            ...resposta,
+            ...newData, // Aqui você mescla as novas informações, como { respostaId: 5 }
+          };
+        }
+        return resposta; // Caso contrário, mantém as respostas anteriores
+      });
+  
+      // Retorna o novo objeto de dados, mantendo os valores antigos, mas com respostas atualizadas
+      return {
+        ...prev,
+        respostas: updatedRespostas,
+      };
+    });
+
+    setJaResolvidas((prev: any[]) => {
+      const index = prev.findIndex((res) => res.idResolvida === idAtual);
+      if (index !== -1) {
+        const updated = [...prev];
+        updated[index] = { idResolvida: idAtual, idResposta: newData.respostaId };
+        return updated;
+      } else {
+        return [...prev, { idResolvida: idAtual, idResposta: newData.respostaId }];
+      }
+    });
+  
+    // Atualiza o idAtual para a próxima pergunta
+    setIdAtual(idAtual + 1);
   };
 
   const handlePrevStep = (newData: any) => {
-    if (idAtual >= 1){
+    setDados((prev: any) => {
+      // Atualiza a resposta da pergunta atual
+      const updatedRespostas = prev.respostas.map((resposta:any, index:number) => {
+        // Se o índice da resposta for o idAtual, atualiza com newData
+        if (index === idAtual) {
+          return {
+            ...resposta,
+            ...newData, // Aqui você mescla as novas informações, como { respostaId: 5 }
+          };
+        }
+        return resposta; // Caso contrário, mantém as respostas anteriores
+      });
+  
+      // Retorna o novo objeto de dados, mantendo os valores antigos, mas com respostas atualizadas
+      return {
+        ...prev,
+        respostas: updatedRespostas,
+      };
+    });
+  
+    // Atualiza o idAtual para a próxima pergunta
+    setJaResolvidas((prev: any[]) => {
+      const index = prev.findIndex((res) => res.idResolvida === idAtual);
+      if (index !== -1) {
+        const updated = [...prev];
+        updated[index] = { idResolvida: idAtual, idResposta: newData.respostaId };
+        return updated;
+      } else {
+        return [...prev, { idResolvida: idAtual, idResposta: newData.respostaId }];
+      }
+    });
+
+    if (idAtual >= 1)
+    {
       setIdAtual(idAtual - 1);
     }
   };
@@ -43,7 +116,8 @@ const Questionario: React.FC = () => {
   useEffect(() =>{
     console.log(dados);
     console.log(respostas);
-  }, [dados, respostas])
+    console.log("Ja resolvida", jaResolvidas);
+  }, [dados, respostas, jaResolvidas])
 
   // Faz a requisição das perguntas apenas uma vez
   useEffect(() => {
@@ -95,7 +169,8 @@ const Questionario: React.FC = () => {
     respostas={respostas} 
     data={dados}
     nextStep={handleNextStep}
-    prevStep={handlePrevStep} />
+    prevStep={handlePrevStep}
+    prevRespostas = {jaResolvidas} />
   );
 };
 

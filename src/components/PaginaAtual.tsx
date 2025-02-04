@@ -1,47 +1,67 @@
 import { Field, Form, Formik } from "formik";
 
-type respostaSelecionada = {
-  id: number; // Apenas o ID da resposta
-};
-
 export default function PaginaAtual(props: any) {
+  // Procura pela resposta já escolhida para a pergunta atual
+  let idRespostaInicio = null;
+  const prevResposta = props.prevRespostas.find(
+    (res: any) => res.idResolvida === props.idAtual
+  );
+  if (prevResposta) {
+    idRespostaInicio = prevResposta.idResposta;
+  }
+
   return (
     <div className="flex flex-col w-[100vw] py-4 justify-around border-2 border-black">
       <h1 className="">{props.pergunta}</h1>
       <Formik
-        initialValues={{ respostaSelecionada: 0 }} // Define um valor inicial (0 ou qualquer ID default)
+        key={props.idAtual} // Força o remount quando a pergunta muda
+        enableReinitialize={true}
+        initialValues={{ respostaId: idRespostaInicio || "" }}
         onSubmit={(values) => {
-          console.log('Resposta Selecionada:', values.respostaSelecionada); // Aqui você verá o id selecionado
-          props.nextStep(values);
+          props.nextStep({ respostaId: Number(values.respostaId) });
         }}
       >
         {({ values }) => (
           <Form>
-            {/* Mapeia as respostas com radio buttons */}
             {props.respostas.map((res: any) => (
               <div key={res.id} className="mb-4">
-                {/* Esconde o radio button */}
-                <Field 
-                  type="radio" 
-                  name="respostaSelecionada" // Aqui o name será "respostaSelecionada"
-                  value={res.id} // O valor será o ID da resposta
-                  id={`resposta-${res.id}`} // Adiciona um id único
-                  className="hidden" // Esconde a bolinha
+                <Field
+                  type="radio"
+                  name="respostaId"
+                  value={res.id}
+                  id={`resposta-${res.id}`}
+                  className="hidden"
                 />
-                {/* Estiliza o label para parecer um botão */}
                 <label
-                  htmlFor={`resposta-${res.id}`} 
-                  className={`flex p-4 border-2 cursor-pointer transition-all duration-200 ${
-                    values.respostaSelecionada === res.id
-                      ? 'bg-blue-500 text-white' // Estilo quando selecionado
-                      : 'bg-white text-black hover:bg-gray-200'
-                  }`}
+                  htmlFor={`resposta-${res.id}`}
+                  className={`flex p-4 border-2 cursor-pointer transition-all duration-200 ${String(values.respostaId) === String(res.id)
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black hover:bg-gray-200"
+                    }`}
                 >
                   {res.texto}
                 </label>
               </div>
             ))}
 
+            <div>
+              {props.idAtual !== 0 && (
+                <button
+                  type="button"
+                  className="mt-4 p-2 bg-blue-500 text-white"
+                  onClick={() =>
+                    props.prevStep({
+                      respostaId:
+                        values.respostaId !== ""
+                          ? Number(values.respostaId)
+                          : idRespostaInicio,
+                    })
+                  }
+                >
+                  Voltar
+                </button>
+              )}
+            </div>
             <button type="submit" className="mt-4 p-2 bg-blue-500 text-white">
               Próximo
             </button>
@@ -51,6 +71,7 @@ export default function PaginaAtual(props: any) {
     </div>
   );
 }
+
 
 
 {/* <div className="flex flex-col min-h-screen bg-white">
