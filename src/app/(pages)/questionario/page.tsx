@@ -129,7 +129,7 @@ const Questionario: React.FC = () => {
         setEnviar(false);
         try {
           // Envia os dados no corpo da requisição
-          const response = await api.post("/sumit", data);
+          const response = await api.post("/submit", data);
           // Opcional: processe ou retorne a resposta
           return response;
         } catch (error) {
