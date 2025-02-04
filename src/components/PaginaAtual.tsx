@@ -18,6 +18,9 @@ export default function PaginaAtual(props: any) {
         enableReinitialize={true}
         initialValues={{ respostaId: idRespostaInicio || "" }}
         onSubmit={(values) => {
+          if (props.qtdPerguntas-1 === props.idAtual){
+            props.setEnviar(true);
+          }
           props.nextStep({ respostaId: Number(values.respostaId) });
         }}
       >
@@ -63,7 +66,7 @@ export default function PaginaAtual(props: any) {
               )}
             </div>
             <button type="submit" className="mt-4 p-2 bg-blue-500 text-white">
-              Próximo
+              {props.qtdPerguntas-1 === props.idAtual ? 'Enviar' : 'Próximo'}
             </button>
           </Form>
         )}

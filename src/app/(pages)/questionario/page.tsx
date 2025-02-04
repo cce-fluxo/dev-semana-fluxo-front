@@ -22,7 +22,7 @@ type listRespostaPergunta = respostaPergunta[];
 
 const Questionario: React.FC = () => {
   const router = useRouter();
-  const usuarioId = 1; // pegar qual usuario esta logado no momento
+  const usuarioId = 2; // pegar qual usuario esta logado no momento
 
   // Estado para armazenar todas as perguntas carregadas do backend
   const [todasPerguntas, setTodasPerguntas] = useState<any[]>([]);
@@ -33,10 +33,11 @@ const Questionario: React.FC = () => {
   });
 
   const [idAtual, setIdAtual] = useState(0); // id da pergunta atual
-  
   const [pergunta, setPergunta] = useState(""); // texto da pergunta recebida
   const [respostas, setRespostas] = useState<listRespostaId>([]); // lista com o texto das respostas
   const [jaResolvidas, setJaResolvidas] = useState<listRespostaPergunta>([]);
+  const [enviar, setEnviar] = useState(false);
+  const [qtdPerguntas, setQtdPerguntas] = useState(0);
 
   const handleNextStep = (newData: any) => {
     setDados((prev: any) => {
@@ -71,7 +72,9 @@ const Questionario: React.FC = () => {
     });
   
     // Atualiza o idAtual para a próxima pergunta
-    setIdAtual(idAtual + 1);
+    if(!enviar){
+      setIdAtual(idAtual + 1);
+    }
   };
 
   const handlePrevStep = (newData: any) => {
@@ -117,7 +120,28 @@ const Questionario: React.FC = () => {
     console.log(dados);
     console.log(respostas);
     console.log("Ja resolvida", jaResolvidas);
-  }, [dados, respostas, jaResolvidas])
+    console.log("qtdPerguntas", qtdPerguntas);
+  }, [dados, respostas, jaResolvidas, qtdPerguntas])
+
+  useEffect(() => {
+    if (enviar) {
+      const enviarCronograma = async (data: any) => {
+        setEnviar(false);
+        try {
+          // Envia os dados no corpo da requisição
+          const response = await api.post("/sumit", data);
+          // Opcional: processe ou retorne a resposta
+          return response;
+        } catch (error) {
+          console.error("Erro ao enviar os dados:", error);
+          // Opcional: trate o erro conforme necessário
+        }
+      };
+  
+      // Chama a função passando os dados
+      enviarCronograma(dados);
+    }
+  }, [dados]);
 
   // Faz a requisição das perguntas apenas uma vez
   useEffect(() => {
@@ -125,6 +149,7 @@ const Questionario: React.FC = () => {
       try {
         const response = await api.get("/pergunta"); // Aguarda a resposta da API
         const perguntas = response.data.data;
+        setQtdPerguntas(perguntas.length);
 
         if (perguntas.length > 0) {
           setTodasPerguntas(perguntas);
@@ -170,7 +195,10 @@ const Questionario: React.FC = () => {
     data={dados}
     nextStep={handleNextStep}
     prevStep={handlePrevStep}
-    prevRespostas = {jaResolvidas} />
+    prevRespostas = {jaResolvidas}
+    qtdPerguntas = {qtdPerguntas}
+    enviar = {enviar}
+    setEnviar = {setEnviar} />
   );
 };
 
