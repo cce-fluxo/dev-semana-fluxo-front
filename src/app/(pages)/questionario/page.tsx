@@ -1,8 +1,5 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
-import OrangeButton from "../../../components/Button";
-import LogoHorizontalLaranja from "../../../components/LogoHorizontalLaranja";
 import { useRouter } from "next/navigation";
 import api from "@/app/services/axios";
 import PaginaAtual from "@/components/PaginaAtual";
@@ -22,7 +19,7 @@ type listRespostaPergunta = respostaPergunta[];
 
 const Questionario: React.FC = () => {
   const router = useRouter();
-  const usuarioId = 2; // pegar qual usuario esta logado no momento
+  const usuarioId = 21; // pegar qual usuario esta logado no momento
 
   // Estado para armazenar todas as perguntas carregadas do backend
   const [todasPerguntas, setTodasPerguntas] = useState<any[]>([]);
@@ -131,7 +128,6 @@ const Questionario: React.FC = () => {
           // Envia os dados no corpo da requisição
           const response = await api.post("/submit", data);
           // Opcional: processe ou retorne a resposta
-          return response;
         } catch (error) {
           console.error("Erro ao enviar os dados:", error);
           // Opcional: trate o erro conforme necessário

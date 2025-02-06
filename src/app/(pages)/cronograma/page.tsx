@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import OrangeButton from "../../../components/Button";
 import LogoHorizontalLaranja from "../../../components/LogoHorizontalLaranja";
 import { useRouter } from "next/navigation";
+import api from "@/app/services/axios";
 
 const PaginaCadastro: React.FC = () => {
   const router = useRouter();
@@ -11,6 +12,13 @@ const PaginaCadastro: React.FC = () => {
   const handleBackToHome = () => {
     router.push("/questionario");
   };
+
+  const idUsuario = 1;
+  const palestrasRecomendadas = getPalestrasUsuario(idUsuario);
+
+  useEffect(()=>{
+    console.log("essas sao as palestras", palestrasRecomendadas);
+  }, [palestrasRecomendadas]);
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -68,3 +76,9 @@ const PaginaCadastro: React.FC = () => {
 };
 
 export default PaginaCadastro;
+
+async function getPalestrasUsuario (id:number){
+
+  const palestras = await api.get(`cronograma/${2}`);
+  return palestras;
+}
