@@ -3,12 +3,15 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/app/services/axios";
 import PaginaAtual from "@/components/PaginaAtual";
+import LoadPage from "@/components/LoadPage";
 
+//Isso aqui é um tipo para uso interno do codigo
 type respostaId = {
   id: number;
   texto: string;
 };
 
+//Isso aqui é um tipo para uso interno do codigo
 type respostaPergunta = {
   idResolvida: number;
   idResposta: number;
@@ -19,7 +22,7 @@ type listRespostaPergunta = respostaPergunta[];
 
 const Questionario: React.FC = () => {
   const router = useRouter();
-  const usuarioId = 21; // pegar qual usuario esta logado no momento
+  const usuarioId = 26; // pegar qual usuario esta logado no momento (Tem que fazer para o codigo todo, acho que com context)
 
   // Estado para armazenar todas as perguntas carregadas do backend
   const [todasPerguntas, setTodasPerguntas] = useState<any[]>([]);
@@ -32,10 +35,12 @@ const Questionario: React.FC = () => {
   const [idAtual, setIdAtual] = useState(0); // id da pergunta atual
   const [pergunta, setPergunta] = useState(""); // texto da pergunta recebida
   const [respostas, setRespostas] = useState<listRespostaId>([]); // lista com o texto das respostas
-  const [jaResolvidas, setJaResolvidas] = useState<listRespostaPergunta>([]);
-  const [enviar, setEnviar] = useState(false);
-  const [qtdPerguntas, setQtdPerguntas] = useState(0);
+  const [jaResolvidas, setJaResolvidas] = useState<listRespostaPergunta>([]); //lista com as perguntas e as respostas que ja foram marcadas, serve para deixar marcada a resposta se o usuario mudar de pagina
+  const [enviar, setEnviar] = useState(false); //vira true na ultima pergunta serve para enviar para o back
+  const [qtdPerguntas, setQtdPerguntas] = useState(0);//verifica quantas perguntas tem (é mais para controle interno do codigo)
+  const [carregando, setCarregando] = useState(false); //verifica se a pagina esta carregando
 
+  //Atualiza para a proxima pagina se clicar no botao voltar e atualiza as informações
   const handleNextStep = (newData: any) => {
     setDados((prev: any) => {
       // Atualiza a resposta da pergunta atual
@@ -57,6 +62,7 @@ const Questionario: React.FC = () => {
       };
     });
 
+    //Verifica se uma pergunta ja foi resolvida
     setJaResolvidas((prev: any[]) => {
       const index = prev.findIndex((res) => res.idResolvida === idAtual);
       if (index !== -1) {
@@ -67,13 +73,17 @@ const Questionario: React.FC = () => {
         return [...prev, { idResolvida: idAtual, idResposta: newData.respostaId }];
       }
     });
-  
+
     // Atualiza o idAtual para a próxima pergunta
-    if(!enviar){
+    if (qtdPerguntas - 1 != idAtual ) {
       setIdAtual(idAtual + 1);
+    }else {
+      setCarregando(true);
     }
   };
 
+
+  //Atualiza para a proxima pagina se clicar no botao voltar e atualiza as informações
   const handlePrevStep = (newData: any) => {
     setDados((prev: any) => {
       // Atualiza a resposta da pergunta atual
@@ -113,13 +123,7 @@ const Questionario: React.FC = () => {
     }
   };
 
-  useEffect(() =>{
-    console.log(dados);
-    console.log(respostas);
-    console.log("Ja resolvida", jaResolvidas);
-    console.log("qtdPerguntas", qtdPerguntas);
-  }, [dados, respostas, jaResolvidas, qtdPerguntas])
-
+  //Envia as respostas do usuario para o Back
   useEffect(() => {
     if (enviar) {
       const enviarCronograma = async (data: any) => {
@@ -127,6 +131,7 @@ const Questionario: React.FC = () => {
         try {
           // Envia os dados no corpo da requisição
           const response = await api.post("/submit", data);
+          router.push("/cronograma");
           // Opcional: processe ou retorne a resposta
         } catch (error) {
           console.error("Erro ao enviar os dados:", error);
@@ -139,7 +144,7 @@ const Questionario: React.FC = () => {
     }
   }, [dados]);
 
-  // Faz a requisição das perguntas apenas uma vez
+  // Pega as perguntas do back
   useEffect(() => {
     const fetchPerguntas = async () => {
       try {
@@ -166,9 +171,9 @@ const Questionario: React.FC = () => {
     };
 
     fetchPerguntas();
-  }, []); // Executa apenas uma vez
+  }, []); 
 
-  // Atualiza a pergunta e as respostas quando `idAtual` muda
+  // Atualiza a pergunta e as respostas quando `idAtual` muda, ou seja quando trocamos de pagina
   useEffect(() => {
     if (todasPerguntas.length > 0) {
       const perguntaRecebida = todasPerguntas[idAtual]; // Pega a pergunta pelo ID atual
@@ -183,8 +188,17 @@ const Questionario: React.FC = () => {
     }
   }, [idAtual, todasPerguntas]); // Executa quando `idAtual` ou `todasPerguntas` mudar
 
+   //Apenas para teste, retirar do codigo final
+   useEffect(() =>{
+    console.log(dados);
+    console.log(respostas);
+    console.log("Ja resolvida", jaResolvidas);
+    console.log("qtdPerguntas", qtdPerguntas);
+    console.log("Esta carregando", carregando);
+  }, [dados, respostas, jaResolvidas, qtdPerguntas, carregando])
+
   return (
-    <PaginaAtual 
+    (!carregando ? <PaginaAtual 
     idAtual={idAtual} 
     pergunta={pergunta} 
     respostas={respostas} 
@@ -194,8 +208,7 @@ const Questionario: React.FC = () => {
     prevRespostas = {jaResolvidas}
     qtdPerguntas = {qtdPerguntas}
     enviar = {enviar}
-    setEnviar = {setEnviar} />
-  );
+    setEnviar = {setEnviar} /> : <LoadPage nome="Principe"/>));
 };
 
 export default Questionario;

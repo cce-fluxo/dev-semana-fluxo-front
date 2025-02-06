@@ -1,21 +1,46 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import OrangeButton from "../../../components/Button";
 import LogoHorizontalLaranja from "../../../components/LogoHorizontalLaranja";
 import { useRouter } from "next/navigation";
 import api from "@/app/services/axios";
 
+type Palestra = {
+  Data: string;
+  horario: string;
+  id: number;
+  local: string;
+  nome: string;
+  tema: string;
+}; //define o tipo palestra, assim como no back para nao deixar o codigo vermelho
+
+type PalestraList = Palestra[]; //define o tipo lista de palestras
+
 const PaginaCadastro: React.FC = () => {
   const router = useRouter();
 
   const handleBackToHome = () => {
-    router.push("/questionario");
+    router.push("/");
   };
 
-  const idUsuario = 1;
-  const palestrasRecomendadas = getPalestrasUsuario(idUsuario);
+  const idUsuario = 26;
 
+  const [palestrasRecomendadas, setPalestrasRecomendadas] = useState<PalestraList>([]); //Guarda as palestras Recomendadas do usuario
+
+  //Carrega as palestras recomendadas e guarda na variavel palestrasRecomendadas
+  useEffect(()=>{
+
+    async function carregarPalestras() {
+
+      const palestras: any = await getPalestrasUsuario(idUsuario, router);
+      setPalestrasRecomendadas(palestras); // Atualiza o estado
+    }
+    carregarPalestras();
+
+  }, [idUsuario])
+
+  //Apenas para teste, deve ser apagado do codigo final
   useEffect(()=>{
     console.log("essas sao as palestras", palestrasRecomendadas);
   }, [palestrasRecomendadas]);
@@ -35,14 +60,14 @@ const PaginaCadastro: React.FC = () => {
       </div>
 
 
-      {[7, 8, 9, 10, 11].map((day, index) => (
+      {palestrasRecomendadas.map((palestra: Palestra, index) => (
         <div className="flex items-center mt-12 ml-16" key={index}>
 
           <div className="flex flex-col items-center mr-10">
             <div className="flex items-center">
               <div className="w-6 h-6 rounded-full bg-orange-500 mr-8"></div>
               <span className="text-black text-5xl font-bold">
-                {day.toString().padStart(2, "0")}
+                {palestra.Data.toString().slice(5, 7)} {/**Coloca os dias da palestra*/}
               </span>
             </div>
             <span className="text-gray-500 text-2xl -mr-8">
@@ -53,11 +78,17 @@ const PaginaCadastro: React.FC = () => {
           <div className="relative bg-gradient-to-r from-gray-100 to-orange-100 rounded-lg shadow-md flex flex-col w-4/5">
             <div className="p-10">
               <h2 className="text-black font-bold text-4xl">
-                Lorem ipsum dolor sit amet consectetur.
+                {palestra.nome}
               </h2>
-              <p className="text-gray-600 mt-2 text-2xl">07/04/25, 13h às 14h</p>
+              <p className="text-gray-600 text-xl">{palestra.tema}</p>
+              <p className="text-gray-600 mt-2 text-2xl">
+                {palestra.Data.toString().slice(8, 10) + 
+                "-" + palestra.Data.toString().slice(5, 7) + 
+                "-" + palestra.Data.toString().slice(0, 4) + ", " + 
+                palestra.horario.toString().slice(11, 13) + "h"}
+</p>
               <p className="text-gray-500 mt-1 text-2xl">
-                Empresa: <span className="font-bold">Lorem ipsum</span>
+                Local: <span className="font-bold">{palestra.local}</span>
               </p>
             </div>
 
@@ -77,8 +108,15 @@ const PaginaCadastro: React.FC = () => {
 
 export default PaginaCadastro;
 
-async function getPalestrasUsuario (id:number){
-
-  const palestras = await api.get(`cronograma/${2}`);
-  return palestras;
+//Faz a requisicao para o back e, caso tenha erro, mostra o erro na tela e depois redireciona para a tela inicial
+async function getPalestrasUsuario (id:number, router:any ){
+try {
+  const palestras = await api.get(`usuario/findPalestras/${id}`);
+  return palestras.data;
+} catch(error: any){
+  const mesnagemError = error.response?.data?.message || "Erro desconhecido.";
+  alert (`Erro ao buscar palestras\n ${mesnagemError}`);
+  router.push("/");
+  
+}
 }

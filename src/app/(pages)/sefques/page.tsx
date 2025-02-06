@@ -8,7 +8,7 @@ const PaginaPrincipal: React.FC = () => {
   const router = useRouter();
 
   const handleButtonClick = () => {
-    router.push("/cronograma");
+    router.push("/questionario");
   };
 
   const images = [
