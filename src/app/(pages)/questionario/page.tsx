@@ -22,7 +22,7 @@ type listRespostaPergunta = respostaPergunta[];
 
 const Questionario: React.FC = () => {
   const router = useRouter();
-  const usuarioId = 26; // pegar qual usuario esta logado no momento (Tem que fazer para o codigo todo, acho que com context)
+  const usuarioId = Number(localStorage.getItem("idUsuario")); // pegar qual usuario esta logado no momento (Tem que fazer para o codigo todo, acho que com context)
 
   // Estado para armazenar todas as perguntas carregadas do backend
   const [todasPerguntas, setTodasPerguntas] = useState<any[]>([]);

@@ -30,12 +30,16 @@ const PaginaCadastro: React.FC = () => {
         email: formData.email,
         periodo: formData.periodo,
         curso: formData.curso,
-      }); //KKKKKKKKKKK mt feio kkkkkkkkkkk
+      });
+  
+      const idUsuario = response.data.id;
 
-      const { token } = response.data; // Supondo que o backend retorna um token
-      setToken(token);
-
+      if (idUsuario) {
+        localStorage.setItem("idUsuario", idUsuario); // Salvando no localStorage
+      }
+  
       console.log("Usuário cadastrado com sucesso:", response.data);
+      console.log("IDusuario", idUsuario);
       router.push("/qrcode");
     } catch (error: any) {
       console.error("Erro ao cadastrar usuário:", error.response?.data || error.message);

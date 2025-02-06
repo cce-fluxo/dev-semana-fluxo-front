@@ -21,10 +21,11 @@ const PaginaCadastro: React.FC = () => {
   const router = useRouter();
 
   const handleBackToHome = () => {
+    localStorage.removeItem("idUsuario");
     router.push("/");
   };
 
-  const idUsuario = 26;
+  const idUsuario = Number(localStorage.getItem("idUsuario"));
 
   const [palestrasRecomendadas, setPalestrasRecomendadas] = useState<PalestraList>([]); //Guarda as palestras Recomendadas do usuario
 
@@ -43,6 +44,7 @@ const PaginaCadastro: React.FC = () => {
   //Apenas para teste, deve ser apagado do codigo final
   useEffect(()=>{
     console.log("essas sao as palestras", palestrasRecomendadas);
+    console.log("Do usuario", idUsuario);
   }, [palestrasRecomendadas]);
 
   return (
