@@ -9,6 +9,7 @@ const PaginaPrincipal: React.FC = () => {
   const router = useRouter();
   
   const handleButtonClick = () => {
+    
     router.push("/cadastro");
   };
 
