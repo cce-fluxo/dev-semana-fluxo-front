@@ -10,6 +10,80 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../services/axios";
 
+const cursos = [
+    "Administração",
+    "Arquitetura e Urbanismo",
+    "Artes Cênicas",
+    "Artes Visuais - Escultura",
+    "Artes Visuais - Gravura",
+    "Astronomia",
+    "Bacharelado em Letras",
+    "Bacharelado em Psicologia",
+    "Bacharelado em Química - M",
+    "Biblioteconomia e Gestão de Unid Informação",
+    "Biblioteconomia Gestão Unid Inform - Cid Univ",
+    "Ciência da Computação",
+    "Ciências Atuariais",
+    "Ciências Atuariais / Estatística (Básico)",
+    "Ciências Biológicas (Básico)",
+    "Ciências Biológicas - M",
+    "Ciências Biológicas - Modalidade Médica",
+    "Ciências Biológicas: Biofísica",
+    "Ciências Biológicas: Biofísica - X",
+    "Ciências Biológicas: Biotecnologia - X",
+    "Ciências Biológicas: Microbiol e Imunologia",
+    "Ciências Contábeis",
+    "Ciências Contábeis - Cid Univ",
+    "Ciências Contábeis - EAD",
+    "Ciências Econômicas",
+    "Ciências Matemáticas e da Terra",
+    "Ciências Sociais",
+    "Complexo de Formação de Professores",
+    "Comunicação Social (Básico)",
+    "Comunicação Visual Design",
+    "Conservação e Restauração",
+    "Dança",
+    "Defesa e Gestão Estratégica Internacional",
+    "Design de Interiores",
+    "Design Industrial",
+    "Direito",
+    "Educação Física",
+    "Enfermagem",
+    "Enfermagem - M",
+    "Engenharia (Básico)",
+    "Engenharia (Núcleo Comum) - M",
+    "Engenharia Ambiental",
+    "Engenharia Civil - M",
+    "Engenharia de Computação e Informação",
+    "Engenharia de Controle e Automação",
+    "Engenharia de Petróleo",
+    "Engenharia de Produção - M",
+    "Engenharia Matemática",
+    "Engenharia Mecânica - M",
+    "Escola de Química (Núcleo Comum)",
+    "Estatística",
+    "Farmácia",
+    "Farmácia - M",
+    "Filosofia",
+    "Física",
+    "Física Médica",
+    "Fisioterapia",
+    "Fonoaudiologia",
+    "Gastronomia",
+    "Geografia",
+    "Geologia",
+    "Gestão Pública Desenv Econômico e Social",
+    "História",
+    "História da Arte",
+    "Jornalismo",
+    "Letras",
+    "Letras - Libras",
+    "Licenciatura em Artes Visuais",
+    "Licenciatura em Ciências Biológicas",
+    "Licenciatura em Ciências Biológicas - EAD",
+    "Licenciatura em Ciências Biológicas - M",
+]
+
 // Definir esquema de validação
 const schema = yup.object().shape({
   nomeCompleto: yup.string().required("Nome é obrigatório"),
@@ -98,25 +172,39 @@ const PaginaCadastro: React.FC = () => {
           Período e Curso
         </label>
         <div className="flex w-full gap-1">
-          <input
-            type="text"
+          <select
             id="periodo"
             {...register("periodo")}
-            placeholder="Digite o período"
-            className="border-4 border-gray-400 bg-transparent text-black px-4 py-8 rounded-xl w-1/2 text-4xl"
-          />
-          <input
-            type="text"
+            className="border-4 border-gray-400 bg-white text-black px-4 py-8 rounded-xl w-1/2 text-4xl appearance-none"
+            style={{ fontSize: "12px" }}
+          >
+            <option value="">Selecione o período</option>
+            {[...Array(15)].map((_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
+          </select>
+          <select
             id="curso"
             {...register("curso")}
-            placeholder="Digite o curso"
-            className="border-4 border-gray-400 bg-transparent text-black px-4 py-8 rounded-xl w-1/2 text-4xl"
-          />
+            className="border-4 border-gray-400 bg-white text-black px-4 py-8 rounded-xl w-1/2 text-4xl appearance-none"
+            style={{ fontSize: "12px" }}
+          >
+            <option value="">Selecione o curso</option>
+            
+            {cursos.map((curso, index) => (
+              <option key={index} value={curso}>
+                {curso}
+              </option>
+            ))}
+          </select>
         </div>
         <p className="text-red-500 text-4xl flex w-full justify-between">
-            <span>{errors.periodo?.message}</span>
-            <span>{errors.curso?.message}</span>
+          <span>{errors.periodo?.message}</span>
+          <span>{errors.curso?.message}</span>
         </p>
+
       </form>
         <div className="flex-1 w-full flex items-end text-4xl">
           <OrangeButton onClick={handleSubmit(handleBackToHome)} text="Cadastre-se" disabled={loading} />
