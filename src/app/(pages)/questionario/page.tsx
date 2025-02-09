@@ -223,7 +223,7 @@ const Questionario: React.FC = () => {
         />
       </div>
     ) : (
-      <LoadPage nome="Principe" />
+      <LoadPage/>
     )
   );
 };

@@ -7,7 +7,6 @@ import * as yup from "yup";
 import OrangeButton from "../../../components/Button";
 import LogoHorizontalLaranja from "../../../components/LogoHorizontalLaranja";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../context/AuthContext";
 import api from "../../services/axios";
 
 // Definir esquema de validação
