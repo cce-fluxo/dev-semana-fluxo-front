@@ -30,11 +30,14 @@ const PaginaCadastro: React.FC = () => {
 
   // Carregar o idUsuario apenas no cliente (dentro do useEffect)
   useEffect(() => {
-    const usuario = localStorage.getItem("idUsuario");
-    if (usuario) {
-      setIdUsuario(Number(usuario)); // Salva o idUsuario no estado
+    if (typeof window !== "undefined") {
+      const usuario = localStorage.getItem("idUsuario");
+      if (usuario) {
+        setIdUsuario(Number(usuario)); // Salva o idUsuario no estado
+      }
     }
   }, []);
+  
 
   // Carregar palestras quando o idUsuario estiver disponível
   useEffect(() => {
