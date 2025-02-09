@@ -21,9 +21,12 @@ const PaginaCadastro: React.FC = () => {
   const router = useRouter();
 
   const handleBackToHome = () => {
-    localStorage.removeItem("idUsuario");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("idUsuario");
+    }
     router.push("/agradecimento");
   };
+  
 
   const [idUsuario, setIdUsuario] = useState<number | null>(null); // Estado para idUsuario
   const [palestrasRecomendadas, setPalestrasRecomendadas] = useState<PalestraList>([]);
