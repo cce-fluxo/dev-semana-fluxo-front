@@ -1,7 +1,9 @@
 "use client";
+
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import OrangeButton from "../../../components/Button";
+import LogoHorizontalLaranja from "../../../components/LogoHorizontalLaranja";
 
 const PaginaPrincipal: React.FC = () => {
   const router = useRouter();
@@ -30,7 +32,7 @@ const PaginaPrincipal: React.FC = () => {
   }, []);
 
   const handleButtonClick = () => {
-    router.push("/sefques");
+    router.push("/qrcode");
   };
 
   const images = [
@@ -48,19 +50,18 @@ const PaginaPrincipal: React.FC = () => {
   };
 
   return (
-    <div
-      className="flex flex-col min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('/background.png')" }}
-    >
-      <div className="flex-grow flex flex-col justify-center text-center px-20 mt-20">
-        <h1 className="text-white text-3xl leading-snug">
-          <span>
-            A Semana Fluxo (SEF) é um evento anual gratuito voltado ao público universitário, organizado pela Fluxo Consultoria, empresa júnior da UFRJ.
-          </span>
+    <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex justify-center mt-40">
+        <LogoHorizontalLaranja />
+      </div>
+
+      <div className="flex-grow flex flex-col justify-center px-20">
+        <h1 className="text-black text-3xl leading-snug m-6">
+          A <strong>Semana Fluxo (SEF)</strong> é um evento anual gratuito voltado ao <strong>público universitário</strong>, organizado pela <strong>Fluxo Consultoria</strong>, empresa júnior da UFRJ.
         </h1>
 
         {/* Carrossel */}
-        <div className="relative mt-32 flex flex-col items-center">
+        <div className="relative mt-10 flex flex-col items-center">
           <div 
             className="relative flex justify-center items-center overflow-hidden rounded-2xl"
             style={{
@@ -106,12 +107,12 @@ const PaginaPrincipal: React.FC = () => {
           </div>
         </div>
 
-        <p className="mt-28 text-white text-3xl leading-relaxed">
-          O principal objetivo é conectar os estudantes ao mercado de trabalho, apresentando possibilidades de carreira para futuros profissionais de engenharia e áreas correlatas.
-          Por meio de palestras, workshops e estandes interativos, o evento promove o contato direto com empresas, oferecendo uma visão prática e atualizada das demandas e oportunidades profissionais.
+        <p className="mt-10 text-black text-3xl leading-relaxed ml-6">
+          O principal objetivo é <strong>conectar</strong> os estudantes ao mercado de trabalho, apresentando <strong>possibilidades de carreira</strong> para futuros profissionais de engenharia e áreas correlatas.
+          Por meio de palestras, workshops e estandes interativos, o evento promove o <strong>contato direto com empresas</strong>, oferecendo uma visão prática e atualizada das demandas e oportunidades profissionais.
         </p>
 
-        <div className="flex justify-end mt-44">
+        <div className="flex justify-end -mt-8">
           <img
             src="/qrcode.png"
             alt="QR Code"

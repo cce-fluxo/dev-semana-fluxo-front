@@ -1,7 +1,6 @@
 import { Field, Form, Formik } from "formik";
 
 export default function PaginaAtual(props: any) {
-  // Procura pela resposta já escolhida para a pergunta atual
   let idRespostaInicio = null;
   const prevResposta = props.prevRespostas.find(
     (res: any) => res.idResolvida === props.idAtual
@@ -11,23 +10,25 @@ export default function PaginaAtual(props: any) {
   }
 
   return (
-    <div className="flex flex-col w-[100vw] py-4 justify-around border-2 border-black">
-      <h1 className="">{props.pergunta}</h1>
+    <div className="flex flex-col w-[100vw] py-4 justify-around min-h-screen">
+      <h1 className="text-5xl font-semibold text-black mt-48 ml-16">Questão {props.idAtual + 1}</h1>
+      <h2 className="text-4xl text-black mt-12 ml-16">{props.pergunta}</h2>
+
       <Formik
         key={props.idAtual} // Força o remount quando a pergunta muda
         enableReinitialize={true}
         initialValues={{ respostaId: idRespostaInicio || "" }}
         onSubmit={(values) => {
-          if (props.qtdPerguntas-1 === props.idAtual){
+          if (props.qtdPerguntas - 1 === props.idAtual) {
             props.setEnviar(true);
           }
           props.nextStep({ respostaId: Number(values.respostaId) });
         }}
       >
         {({ values }) => (
-          <Form>
+          <Form className="flex flex-col flex-grow mt-14 px-12">
             {props.respostas.map((res: any) => (
-              <div key={res.id} className="mb-4">
+              <div key={res.id} className="mb-6">
                 <Field
                   type="radio"
                   name="respostaId"
@@ -37,43 +38,52 @@ export default function PaginaAtual(props: any) {
                 />
                 <label
                   htmlFor={`resposta-${res.id}`}
-                  className={`flex p-4 border-2 cursor-pointer transition-all duration-200 ${String(values.respostaId) === String(res.id)
+                  className={`flex p-10 border-2 cursor-pointer transition-all duration-200 ${
+                    String(values.respostaId) === String(res.id)
                       ? "bg-blue-500 text-white"
-                      : "bg-white text-black hover:bg-gray-200"
-                    }`}
+                      : "bg-white text-4xl text-black hover:bg-gray-200 rounded-xl shadow-lg"
+                  }`}
                 >
                   {res.texto}
                 </label>
               </div>
             ))}
 
-            <div>
-              {props.idAtual !== 0 && (
-                <button
-                  type="button"
-                  className="mt-4 p-2 bg-blue-500 text-white"
-                  onClick={() =>
-                    props.prevStep({
-                      respostaId:
-                        values.respostaId !== ""
-                          ? Number(values.respostaId)
-                          : idRespostaInicio,
-                    })
-                  }
-                >
-                  Voltar
-                </button>
-              )}
-            </div>
-            <button type="submit" className="mt-4 p-2 bg-blue-500 text-white">
-              {props.qtdPerguntas-1 === props.idAtual ? 'Enviar' : 'Próximo'}
-            </button>
+            {props.idAtual !== 0 && (
+              <button
+                type="button"
+                className="w-82 mt-6 p-6 text-green-800 text-3xl ml-auto bg-[#BAD66B]"
+                onClick={() =>
+                  props.prevStep({
+                    respostaId:
+                      values.respostaId !== ""
+                        ? Number(values.respostaId)
+                        : idRespostaInicio,
+                  })
+                }
+              >
+                ← Voltar à anterior
+              </button>
+            )}
+            <div className="fixed bottom-0 left-0 w-full flex flex-col items-center pb-4">
+      {/* QR Code acima do botão */}
+      <img src="/qrcode.png" alt="QR Code" className="w-32 h-32 mb-10 ml-auto mr-8" />
+
+      {/* Botão verde de próxima questão */}
+      <button
+        type="submit"
+        className="w-full h-52 p-4 text-4xl font-bold text-green-800 bg-[#BAD66B]"
+      >
+        {props.qtdPerguntas - 1 === props.idAtual ? "Enviar" : "Próxima Questão"}
+      </button>
+    </div>
           </Form>
         )}
       </Formik>
     </div>
   );
 }
+
 
 
 

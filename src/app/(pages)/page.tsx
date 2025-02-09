@@ -16,14 +16,14 @@ const PaginaPrincipal: React.FC = () => {
       className="flex flex-col min-h-screen bg-cover bg-center"
       style={{ backgroundImage: "url('/background.png')" }}
     >
-      <div className="flex-grow flex items-center justify-center -mt-24">
+      <div className="flex-grow flex items-center justify-center -mt-52">
         <img
-          src="/logo_vertical_branco.png"
+          src="/logo_vertical_verde.png"
           alt="Logo"
         />
       </div>
 
-      <div className="flex-grow flex justify-center text-center -mt-10">
+      <div className="flex-grow flex justify-end text-center mt-6 mr-20">
         <h1 className="text-white font-bold text-5xl leading-snug">
           <span>Personalize sua jornada na</span>
           <br />

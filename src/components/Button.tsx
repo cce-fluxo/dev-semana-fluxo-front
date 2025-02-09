@@ -3,16 +3,20 @@ import React from "react";
 interface ButtonProps {
   onClick: () => void;
   text: string;
+  disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ onClick, text }) => {
+const Button: React.FC<ButtonProps> = ({ onClick, text, disabled }) => {
   return (
     <button
       onClick={onClick}
-      className="w-full h-52 bg-orange-500 text-white font-bold"
-      style={{ backgroundColor: "#CC5831" }}
+      disabled={disabled} // Bloquear clique quando estiver carregando
+      className={`w-full h-52 font-bold text-green-800 ${
+        disabled ? "opacity-50 cursor-not-allowed" : "hover:opacity-80"
+      }`}
+      style={{ backgroundColor: "#BAD66B" }}
     >
-      {text}
+      {disabled ? "Carregando..." : text}
     </button>
   );
 };

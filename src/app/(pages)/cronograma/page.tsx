@@ -22,7 +22,7 @@ const PaginaCadastro: React.FC = () => {
 
   const handleBackToHome = () => {
     localStorage.removeItem("idUsuario");
-    router.push("/");
+    router.push("/agradecimento");
   };
 
   const idUsuario = Number(localStorage.getItem("idUsuario"));
@@ -48,7 +48,10 @@ const PaginaCadastro: React.FC = () => {
   }, [palestrasRecomendadas]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div 
+    className="flex flex-col min-h-screen bg-cover bg-center"
+    style={{ backgroundImage: "url('/background_cristo.png')", backgroundSize: "cover", backgroundPosition: "center" }}
+    >
 
       <div className="flex justify-center mt-20">
         <LogoHorizontalLaranja />

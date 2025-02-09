@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation";
 import api from "@/app/services/axios";
 import PaginaAtual from "@/components/PaginaAtual";
 import LoadPage from "@/components/LoadPage";
+import LogoHorizontalLaranja from "../../../components/LogoHorizontalLaranja";
+
+
 
 //Isso aqui é um tipo para uso interno do codigo
 type respostaId = {
@@ -198,17 +201,32 @@ const Questionario: React.FC = () => {
   }, [dados, respostas, jaResolvidas, qtdPerguntas, carregando])
 
   return (
-    (!carregando ? <PaginaAtual 
-    idAtual={idAtual} 
-    pergunta={pergunta} 
-    respostas={respostas} 
-    data={dados}
-    nextStep={handleNextStep}
-    prevStep={handlePrevStep}
-    prevRespostas = {jaResolvidas}
-    qtdPerguntas = {qtdPerguntas}
-    enviar = {enviar}
-    setEnviar = {setEnviar} /> : <LoadPage nome="Principe"/>));
+    !carregando ? (
+      <div 
+        className="flex flex-col items-center justify-center min-h-screen w-full h-full"
+        style={{ backgroundImage: "url('background_cadastro.png')" }}
+      >
+        <div className="mt-44">
+          <LogoHorizontalLaranja />
+        </div>
+
+        <PaginaAtual 
+          idAtual={idAtual} 
+          pergunta={pergunta} 
+          respostas={respostas} 
+          data={dados}
+          nextStep={handleNextStep}
+          prevStep={handlePrevStep}
+          prevRespostas={jaResolvidas}
+          qtdPerguntas={qtdPerguntas}
+          enviar={enviar}
+          setEnviar={setEnviar} 
+        />
+      </div>
+    ) : (
+      <LoadPage nome="Principe" />
+    )
+  );
 };
 
 export default Questionario;

@@ -9,14 +9,14 @@ const PaginaCadastro: React.FC = () => {
   const router = useRouter();
 
   const handleBackToHome = () => {
-    router.push("/sefex");
+    router.push("/questionario");
   };
 
   return (
     <div
       className="flex flex-col min-h-screen bg-cover bg-center"
       style={{
-        backgroundImage: "url('/background_diferente.png')",
+        backgroundImage: "url('/background_qrcode.png')",
       }}
     >
       <div className="flex justify-center mt-44">
@@ -30,11 +30,11 @@ const PaginaCadastro: React.FC = () => {
         </h1>
 
         <div className="mt-24">
-          <img src="/qrcode.png" alt="QR Code" />
-          <p className="mt-4 text-black text-2xl">
+        <img src="/qrcode.png" alt="QR Code" className="max-w-full max-h-full w-[700px] h-[600px]" />
+          <p className="mt-4 text-black text-3xl">
             Caso não consiga se inscrever nesse momento,
           </p>
-          <p className="mt-2 text-black text-2xl">
+          <p className="mt-2 text-black text-3xl">
           Code ficará disponível em todas as outras telas.
           </p>
         </div>

@@ -7,7 +7,6 @@ const LogoHorizontalLaranja: React.FC = () => {
     <img
       src="/fluxo_horizontal_laranja.png"
       alt="Logo Horizontal Laranja"
-      className="w-60 mt-54" 
     />
   );
 };
