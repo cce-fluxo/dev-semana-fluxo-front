@@ -133,7 +133,6 @@ const Questionario: React.FC = () => {
         setEnviar(false);
         try {
           // Envia os dados no corpo da requisição
-          const response = await api.post("/submit", data);
           router.push("/cronograma");
           // Opcional: processe ou retorne a resposta
         } catch (error) {

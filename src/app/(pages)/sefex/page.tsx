@@ -12,14 +12,6 @@ const PaginaPrincipal: React.FC = () => {
   const firstImageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    const updateDimensions = () => {
-      if (firstImageRef.current) {
-        setContainerDimensions({
-          width: firstImageRef.current.naturalWidth,
-          height: firstImageRef.current.naturalHeight,
-        });
-      }
-    };
 
     const img = new Image();
     img.src = "/foto1.png";

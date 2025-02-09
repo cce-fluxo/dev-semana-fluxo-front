@@ -20,7 +20,6 @@ const schema = yup.object().shape({
 
 const PaginaCadastro: React.FC = () => {
   const router = useRouter();
-  const { setToken } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const {
