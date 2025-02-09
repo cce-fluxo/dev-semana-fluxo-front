@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://dev-semana-fluxo-back.onrender.com', // Substitua pelo seu backend local
+  baseURL: process.env.NEXT_PUBLIC_API_URL, // Agora o front pega a URL do env
 });
 
 export default api;
