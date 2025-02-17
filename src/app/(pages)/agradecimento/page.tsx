@@ -9,7 +9,7 @@ const PaginaPrincipal: React.FC = () => {
   const router = useRouter();
 
   const handleButtonClick = () => {
-    router.push("/sefex");
+    router.push("/");
   };
 
   const images = [

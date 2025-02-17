@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import OrangeButton from "../../../components/Button";
 import LogoHorizontalLaranja from "../../../components/LogoHorizontalLaranja";
 
 const PaginaPrincipal: React.FC = () => {
   const router = useRouter();
+  const [isExiting, setIsExiting] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
   const firstImageRef = useRef<HTMLImageElement>(null);
@@ -32,7 +34,10 @@ const PaginaPrincipal: React.FC = () => {
   }, []);
 
   const handleButtonClick = () => {
-    router.push("/qrcode");
+    setIsExiting(true);
+    setTimeout(() => {
+      router.push("/qrcode");
+    }, 500);
   };
 
   const images = [
@@ -50,7 +55,16 @@ const PaginaPrincipal: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div
+      className="flex flex-col min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: "url('/background_sefques.png')" }}
+    >
+      <motion.div
+        className="flex flex-col min-h-screen"
+        initial={{ x: 0 }}
+        animate={{ x: isExiting ? "-100vw" : 0 }}
+        transition={{ duration: 0.1, ease: "easeInOut" }}
+      >
       <div className="flex justify-center mt-40">
         <LogoHorizontalLaranja />
       </div>
@@ -124,7 +138,8 @@ const PaginaPrincipal: React.FC = () => {
       <div className="flex items-center justify-center h-52 text-4xl">
         <OrangeButton onClick={handleButtonClick} text="Prosseguir" />
       </div>
-    </div>
+    </motion.div>
+  </div>
   );
 };
 

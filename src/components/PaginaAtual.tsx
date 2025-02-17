@@ -1,4 +1,5 @@
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 export default function PaginaAtual(props: any) {
   let idRespostaInicio = null;
@@ -9,15 +10,21 @@ export default function PaginaAtual(props: any) {
     idRespostaInicio = prevResposta.idResposta;
   }
 
+  // Esquema de validação com Yup
+  const validationSchema = Yup.object({
+    respostaId: Yup.string().required("Você precisa selecionar uma resposta antes de continuar."),
+  });
+
   return (
     <div className="flex flex-col w-[100vw] py-4 justify-around min-h-screen">
       <h1 className="text-5xl font-semibold text-black mt-48 ml-16">Questão {props.idAtual + 1}</h1>
       <h2 className="text-4xl text-black mt-12 ml-16">{props.pergunta}</h2>
 
       <Formik
-        key={props.idAtual} // Força o remount quando a pergunta muda
+        key={props.idAtual}
         enableReinitialize={true}
         initialValues={{ respostaId: idRespostaInicio || "" }}
+        validationSchema={validationSchema} // Adicionando a validação
         onSubmit={(values) => {
           if (props.qtdPerguntas - 1 === props.idAtual) {
             props.setEnviar(true);
@@ -40,7 +47,7 @@ export default function PaginaAtual(props: any) {
                   htmlFor={`resposta-${res.id}`}
                   className={`flex p-10 border-2 cursor-pointer transition-all duration-200 ${
                     String(values.respostaId) === String(res.id)
-                      ? "bg-blue-500 text-white"
+                      ? "bg-[#BAD66B] text-green-800 text-4xl"
                       : "bg-white text-4xl text-black hover:bg-gray-200 rounded-xl shadow-lg"
                   }`}
                 >
@@ -48,6 +55,13 @@ export default function PaginaAtual(props: any) {
                 </label>
               </div>
             ))}
+
+            {/* Mensagem de erro se nenhuma resposta for selecionada */}
+            <ErrorMessage
+              name="respostaId"
+              component="div"
+              className="text-red-500 text-4xl mt-2"
+            />
 
             {props.idAtual !== 0 && (
               <button
@@ -65,18 +79,19 @@ export default function PaginaAtual(props: any) {
                 ← Voltar à anterior
               </button>
             )}
-            <div className="fixed bottom-0 left-0 w-full flex flex-col items-center pb-4">
-      {/* QR Code acima do botão */}
-      <img src="/qrcode.png" alt="QR Code" className="w-32 h-32 mb-10 ml-auto mr-8" />
 
-      {/* Botão verde de próxima questão */}
-      <button
-        type="submit"
-        className="w-full h-52 p-4 text-4xl font-bold text-green-800 bg-[#BAD66B]"
-      >
-        {props.qtdPerguntas - 1 === props.idAtual ? "Enviar" : "Próxima Questão"}
-      </button>
-    </div>
+            <div className="fixed bottom-0 left-0 w-full flex flex-col items-center">
+              {/* QR Code acima do botão */}
+              <img src="/qrcode.png" alt="QR Code" className="w-32 h-32 mb-12 ml-auto mr-8" />
+
+              {/* Botão verde de próxima questão */}
+              <button
+                type="submit"
+                className="w-full h-52 p-4 text-4xl font-bold text-green-800 bg-[#BAD66B]"
+              >
+                {props.qtdPerguntas - 1 === props.idAtual ? "Enviar" : "Próxima Questão"}
+              </button>
+            </div>
           </Form>
         )}
       </Formik>
