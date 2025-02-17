@@ -117,7 +117,7 @@ export default PaginaCadastro;
 async function getPalestrasUsuario (id:number, router:any ){
 try {
   const palestras = await api.get(`usuario/findPalestras/${id}`);
-  return palestras.data;
+  return palestras.data.data;
 } catch(error: any){
   const mesnagemError = error.response?.data?.message || "Erro desconhecido.";
   alert (`Erro ao buscar palestras\n ${mesnagemError}`);
