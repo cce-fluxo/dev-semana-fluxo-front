@@ -11,6 +11,8 @@ import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../services/axios";
 import Dropdown from "../../../components/Dropdown";
+import ModalPeriodos from "@/components/ModalPeriodos";
+import ModalCursos from "@/components/ModalCursos";
 
 const periodos = Array.from({ length: 15 }, (_, i) => i + 1);
 
@@ -95,20 +97,24 @@ const schema = yup.object().shape({
 });
 
 const PaginaCadastro: React.FC = () => {
-  const router = useRouter();
-  const { setToken } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [isExiting, setIsExiting] = useState(false);
+const router = useRouter();
+const { setToken } = useAuth();
+const [loading, setLoading] = useState(false);
+const [isExiting, setIsExiting] = useState(false);
+const [showModalPeriodo, setShowModalPeriodo] = useState(false);
+const [showModalCurso, setShowModalCurso] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    trigger
-  } = useForm({
-    resolver: yupResolver(schema),
-    mode: 'onChange', // Adicione esta linha
-  });
+const {
+  register,
+  handleSubmit,
+  watch,
+  setValue,
+  trigger,
+  formState: { errors },
+} = useForm({
+  resolver: yupResolver(schema),
+  mode: 'onChange',
+});
 
   const handleBackToHome = async (data: any) => {
     setLoading(true);
@@ -185,9 +191,56 @@ const PaginaCadastro: React.FC = () => {
           <p className="text-red-500 text-4xl">{errors.email?.message}</p>
 
           <div className="flex w-full gap-6 mt-8">
-            <Dropdown id="periodo" label="Período" options={periodos} register={register} error={errors.periodo?.message} />
-            <Dropdown id="curso" label="Curso" options={cursos} register={register} error={errors.curso?.message} />
+            <div className="w-full">
+              <label className="text-black text-4xl mb-4 block">Período</label>
+              <button
+                type="button"
+                onClick={() => setShowModalPeriodo(true)}
+                className="border-4 border-gray-400 bg-transparent text-black px-4 py-8 rounded-xl w-full text-4xl text-left"
+              >
+                {watch('periodo') || 'Selecione o período'}
+              </button>
+              {errors.periodo && (
+                <p className="text-red-500 text-4xl">{errors.periodo.message}</p>
+              )}
+            </div>
+
+            <div className="w-full">
+              <label className="text-black text-4xl mb-4 block">Curso</label>
+              <button
+                type="button"
+                onClick={() => setShowModalCurso(true)}
+                className="border-4 border-gray-400 bg-transparent text-black px-4 py-8 rounded-xl w-full text-4xl text-left"
+              >
+                {watch('curso') || 'Selecione o curso'}
+              </button>
+              {errors.curso && (
+                <p className="text-red-500 text-4xl">{errors.curso.message}</p>
+              )}
+            </div>
           </div>
+
+          <ModalPeriodos
+            isOpen={showModalPeriodo}
+            onClose={() => setShowModalPeriodo(false)}
+            periodoSelecionado={watch('periodo')}
+            onSelecionarPeriodo={(periodo) => {
+              setValue('periodo', periodo);
+              trigger('periodo');
+            }}
+            periodos={periodos}
+          />
+
+          <ModalCursos
+            isOpen={showModalCurso}
+            onClose={() => setShowModalCurso(false)}
+            cursoSelecionado={watch('curso')}
+            onSelecionarCurso={(curso) => {
+              setValue('curso', curso);
+              trigger('curso');
+            }}
+            cursos={cursos}
+          />
 
         </form>
 
