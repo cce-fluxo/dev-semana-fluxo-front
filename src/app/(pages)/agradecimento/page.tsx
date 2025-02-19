@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import OrangeButton from "../../../components/Button";
 import LogoHorizontalLaranja from "../../../components/LogoHorizontalLaranja";
 import api from "@/app/services/axios";
+import withClient from "@/app/utils/withClient";
 
 const PaginaPrincipal: React.FC = () => {
   const router = useRouter();
@@ -103,4 +104,4 @@ const PaginaPrincipal: React.FC = () => {
   );
 };
 
-export default PaginaPrincipal;
+export default withClient(PaginaPrincipal);
