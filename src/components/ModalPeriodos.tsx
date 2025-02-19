@@ -5,7 +5,7 @@ interface ModalPeriodosProps {
   onClose: () => void;
   periodoSelecionado: string;
   onSelecionarPeriodo: (periodo: string) => void;
-  periodos: string[];
+  periodos: number[];
 }
 
 const ModalPeriodos: React.FC<ModalPeriodosProps> = ({
@@ -30,11 +30,11 @@ const ModalPeriodos: React.FC<ModalPeriodosProps> = ({
             <button
               key={periodo}
               onClick={() => {
-                onSelecionarPeriodo(periodo);
+                onSelecionarPeriodo(periodo.toString());
                 onClose();
               }}
               className={`w-full text-4xl p-6 text-left rounded-xl mb-4 ${
-                periodo === periodoSelecionado
+                periodo.toString() === periodoSelecionado
                   ? "bg-orange-500 text-white"
                   : "hover:bg-gray-100"
               }`}
