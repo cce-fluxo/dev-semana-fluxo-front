@@ -26,7 +26,6 @@ const PaginaCadastro: React.FC = () => {
   const handleBackToHome = () => {
     setIsExiting(true);
     setTimeout(() => {
-      localStorage.removeItem("idUsuario");
       router.push("/agradecimento");
     }, 500);
   };

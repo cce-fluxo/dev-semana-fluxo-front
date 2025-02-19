@@ -11,82 +11,82 @@ import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../services/axios";
 import Dropdown from "../../../components/Dropdown";
+import ModalPeriodos from "@/components/ModalPeriodos";
+import ModalCursos from "@/components/ModalCursos";
 
 const periodos = Array.from({ length: 15 }, (_, i) => i + 1);
 
 const cursos = [
-    "Administração",
-    "Arquitetura e Urbanismo",
-    "Artes Cênicas",
-    "Artes Visuais - Escultura",
-    "Artes Visuais - Gravura",
-    "Astronomia",
-    "Bacharelado em Letras",
-    "Bacharelado em Psicologia",
-    "Bacharelado em Química - M",
-    "Biblioteconomia e Gestão de Unid Informação",
-    "Biblioteconomia Gestão Unid Inform - Cid Univ",
-    "Ciência da Computação",
-    "Ciências Atuariais",
-    "Ciências Atuariais / Estatística (Básico)",
-    "Ciências Biológicas (Básico)",
-    "Ciências Biológicas - M",
-    "Ciências Biológicas - Modalidade Médica",
-    "Ciências Biológicas: Biofísica",
-    "Ciências Biológicas: Biofísica - X",
-    "Ciências Biológicas: Biotecnologia - X",
-    "Ciências Biológicas: Microbiol e Imunologia",
-    "Ciências Contábeis",
-    "Ciências Contábeis - Cid Univ",
-    "Ciências Contábeis - EAD",
-    "Ciências Econômicas",
-    "Ciências Matemáticas e da Terra",
-    "Ciências Sociais",
-    "Complexo de Formação de Professores",
-    "Comunicação Social (Básico)",
-    "Comunicação Visual Design",
-    "Conservação e Restauração",
-    "Dança",
-    "Defesa e Gestão Estratégica Internacional",
-    "Design de Interiores",
-    "Design Industrial",
-    "Direito",
-    "Educação Física",
-    "Enfermagem",
-    "Enfermagem - M",
-    "Engenharia (Básico)",
-    "Engenharia (Núcleo Comum) - M",
-    "Engenharia Ambiental",
-    "Engenharia Civil - M",
-    "Engenharia de Computação e Informação",
-    "Engenharia de Controle e Automação",
-    "Engenharia de Petróleo",
-    "Engenharia de Produção - M",
-    "Engenharia Matemática",
-    "Engenharia Mecânica - M",
-    "Escola de Química (Núcleo Comum)",
-    "Estatística",
-    "Farmácia",
-    "Farmácia - M",
-    "Filosofia",
-    "Física",
-    "Física Médica",
-    "Fisioterapia",
-    "Fonoaudiologia",
-    "Gastronomia",
-    "Geografia",
-    "Geologia",
-    "Gestão Pública Desenv Econômico e Social",
-    "História",
-    "História da Arte",
-    "Jornalismo",
-    "Letras",
-    "Letras - Libras",
-    "Licenciatura em Artes Visuais",
-    "Licenciatura em Ciências Biológicas",
-    "Licenciatura em Ciências Biológicas - EAD",
-    "Licenciatura em Ciências Biológicas - M",
-]
+  "Astronomia",
+  "Artes Cênicas",
+  "Arquitetura e Urbanismo",
+  "Administração",
+  "Biblioteconomia e Gestão de Unidades de Informação (CBG)",
+  "Ciências Biológicas Modalidade Microbiologia e Imunologia",
+  "Comunicação Social",
+  "Composição Paisagística",
+  "Composição de Interior",
+  "Ciências Sociais",
+  "Ciências Econômicas",
+  "Ciências Contábeis",
+  "Ciências Biológicas Modalidade Médica",
+  "Ciências Biológicas Modalidade Biofísica",
+  "Ciências Biológicas",
+  "Ciências da Computação",
+  "Ciências Atuariais ou Estatísticas",
+  "Direito",
+  "Direção Teatral",
+  "Desenho Industrial",
+  "Dança",
+  "Engenharia Civil",
+  "Engenharia Metalúrgica",
+  "Engenharia de Controle e Automação",
+  "Engenharia Mecânica",
+  "Engenharia de Materiais",
+  "Engenharia Ambiental",
+  "Engenharia de Produção",
+  "Engenharia de Petróleo",
+  "Engenharia de Computação e Informação",
+  "Engenharia Eletrônica e de Computação",
+  "Engenharia Naval e Oceânica",
+  "Engenharia Elétrica",
+  "Escultura",
+  "Engenharia Química",
+  "Engenharia de Bioprocessos",
+  "Engenharia de Alimentos",
+  "Enfermagem e Obstetrícia",
+  "Educação Física",
+  "Farmácia - Macaé",
+  "Fonoaudiologia",
+  "Fisioterapia",
+  "Física",
+  "Filosofia",
+  "Farmácia",
+  "Gravura",
+  "Geologia",
+  "Geografia",
+  "História",
+  "Licenciatura em Química - Macaé",
+  "Licenciatura em Educação Artística: Artes Plásticas e Desenho",
+  "Licenciatura em Ciências Biológicas - Macaé",
+  "Letras",
+  "Música",
+  "Microbiologia e Imunologia",
+  "Meteorologia",
+  "Medicina",
+  "Matemática Aplicada",
+  "Matemática (Bacharelado e Licenciatura)",
+  "Nutrição",
+  "Odontologia",
+  "Psicologia",
+  "Pintura",
+  "Pedagogia",
+  "Química Industrial",
+  "Química",
+  "Saúde Coletiva",
+  "Serviço Social"
+];
+
 
 // Definir esquema de validação
 const schema = yup.object().shape({
@@ -97,20 +97,24 @@ const schema = yup.object().shape({
 });
 
 const PaginaCadastro: React.FC = () => {
-  const router = useRouter();
-  const { setToken } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [isExiting, setIsExiting] = useState(false);
+const router = useRouter();
+const { setToken } = useAuth();
+const [loading, setLoading] = useState(false);
+const [isExiting, setIsExiting] = useState(false);
+const [showModalPeriodo, setShowModalPeriodo] = useState(false);
+const [showModalCurso, setShowModalCurso] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    trigger
-  } = useForm({
-    resolver: yupResolver(schema),
-    mode: 'onChange', // Adicione esta linha
-  });
+const {
+  register,
+  handleSubmit,
+  watch,
+  setValue,
+  trigger,
+  formState: { errors },
+} = useForm({
+  resolver: yupResolver(schema),
+  mode: 'onChange',
+});
 
   const handleBackToHome = async (data: any) => {
     setLoading(true);
@@ -187,9 +191,56 @@ const PaginaCadastro: React.FC = () => {
           <p className="text-red-500 text-4xl">{errors.email?.message}</p>
 
           <div className="flex w-full gap-6 mt-8">
-            <Dropdown id="periodo" label="Período" options={periodos} register={register} error={errors.periodo?.message} />
-            <Dropdown id="curso" label="Curso" options={cursos} register={register} error={errors.curso?.message} />
+            <div className="w-full">
+              <label className="text-black text-4xl mb-4 block">Período</label>
+              <button
+                type="button"
+                onClick={() => setShowModalPeriodo(true)}
+                className="border-4 border-gray-400 bg-transparent text-black px-4 py-8 rounded-xl w-full text-4xl text-left"
+              >
+                {watch('periodo') || 'Selecione o período'}
+              </button>
+              {errors.periodo && (
+                <p className="text-red-500 text-4xl">{errors.periodo.message}</p>
+              )}
+            </div>
+
+            <div className="w-full">
+              <label className="text-black text-4xl mb-4 block">Curso</label>
+              <button
+                type="button"
+                onClick={() => setShowModalCurso(true)}
+                className="border-4 border-gray-400 bg-transparent text-black px-4 py-8 rounded-xl w-full text-4xl text-left"
+              >
+                {watch('curso') || 'Selecione o curso'}
+              </button>
+              {errors.curso && (
+                <p className="text-red-500 text-4xl">{errors.curso.message}</p>
+              )}
+            </div>
           </div>
+
+          <ModalPeriodos
+            isOpen={showModalPeriodo}
+            onClose={() => setShowModalPeriodo(false)}
+            periodoSelecionado={watch('periodo')}
+            onSelecionarPeriodo={(periodo) => {
+              setValue('periodo', periodo);
+              trigger('periodo');
+            }}
+            periodos={periodos}
+          />
+
+          <ModalCursos
+            isOpen={showModalCurso}
+            onClose={() => setShowModalCurso(false)}
+            cursoSelecionado={watch('curso')}
+            onSelecionarCurso={(curso) => {
+              setValue('curso', curso);
+              trigger('curso');
+            }}
+            cursos={cursos}
+          />
 
         </form>
 

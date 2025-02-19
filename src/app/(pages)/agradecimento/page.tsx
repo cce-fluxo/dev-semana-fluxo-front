@@ -1,21 +1,61 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import OrangeButton from "../../../components/Button";
 import LogoHorizontalLaranja from "../../../components/LogoHorizontalLaranja";
+import api from "@/app/services/axios";
 
 const PaginaPrincipal: React.FC = () => {
   const router = useRouter();
+  const idUsuario = Number(localStorage.getItem("idUsuario"));
+  const rotaCronograma = "https://amazon.com";
 
-  const handleButtonClick = () => {
-    router.push("/");
+  const handleButtonClick = async () => {
+
+    // Garantindo que o localStorage será limpo antes do redirecionamento
+    await new Promise((resolve) => {
+      const remove = localStorage.removeItem("idUsuario");
+      resolve(remove);
+    });
+    
+    // Redireciona para a página inicial
+    router.replace("/");
   };
 
   const images = [
     "/foto1.png",
     "/qrcode.png",
   ];
+
+  const sendEmail = async () => {
+    try {
+
+      if (!idUsuario || idUsuario === 0) {
+        throw new Error(`Usuário ${idUsuario} não encontrado`);
+      }
+  
+      console.log("fui chamada");
+      await api.post("/submit/enviar-email", {
+        usuarioId: idUsuario,
+        rotaPrint: rotaCronograma
+      });
+  
+    } catch (error) {
+      console.error("Erro ao enviar email:", error);
+    }
+  };
+  
+  useEffect(() => {
+    // Função assíncrona interna para poder usar await
+    const carregarPagina = async () => {
+      await sendEmail();
+    };
+  
+    carregarPagina();
+  }, []);
+  
+
 
   return (
     <div
