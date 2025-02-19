@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import OrangeButton from "../../../components/Button";
 import LogoHorizontalLaranja from "../../../components/LogoHorizontalLaranja";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import api from "@/app/services/axios";
 import withClient from "@/app/utils/withClient";
 
@@ -22,6 +22,9 @@ type PalestraList = Palestra[]; //define o tipo lista de palestras
 const PaginaCadastro: React.FC = () => {
   const router = useRouter();
   const [isExiting, setIsExiting] = useState(false);
+  const [idUsuario, setIdUsuario] = useState<number | null> (null);
+  const [palestrasRecomendadas, setPalestrasRecomendadas] = useState<PalestraList>([]); //Guarda as palestras Recomendadas do usuario
+  const searchParams = useSearchParams();
 
   const handleBackToHome = () => {
     setIsExiting(true);
@@ -30,18 +33,56 @@ const PaginaCadastro: React.FC = () => {
     }, 500);
   };
 
-  const idUsuario = Number(localStorage.getItem("idUsuario"));
-
-  const [palestrasRecomendadas, setPalestrasRecomendadas] = useState<PalestraList>([]); //Guarda as palestras Recomendadas do usuario
-
-  //Carrega as palestras recomendadas e guarda na variavel palestrasRecomendadas
-  useEffect(()=>{
-    async function carregarPalestras() {
+   // Função para carregar as palestras, depende de idUsuario já estar definido
+   const carregarPalestras = async () => {
+    try {
+      if (idUsuario === null) {
+        throw new Error("ID do usuário não definido");
+      }
       const palestras: any = await getPalestrasUsuario(idUsuario, router);
-      setPalestrasRecomendadas(palestras); // Atualiza o estado
+      setPalestrasRecomendadas(palestras);
+    } catch (error) {
+      console.error("Erro ao carregar palestras:", error);
+      alert(error);
+      router.replace("/");
     }
-    carregarPalestras();
-  }, [idUsuario, router]);
+  };
+
+  // Função para carregar o ID do usuário a partir da URL ou do localStorage
+  const carregarIdUsuario = async () => {
+    try {
+      const idQuery = searchParams.get("idUsuario");
+      if (idQuery) {
+        setIdUsuario(Number(idQuery));
+      } else {
+        const idLocal = localStorage.getItem("idUsuario");
+        if (idLocal) {
+          setIdUsuario(Number(idLocal));
+        } else {
+          throw new Error("Usuário não encontrado!");
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao carregar idUsuario:", error);
+      alert(error);
+      router.replace("/");
+    }
+  };
+
+  // Inicializa o carregamento quando o componente monta
+  useEffect(() => {
+    const init = async () => {
+      await carregarIdUsuario();
+    };
+    init();
+  }, []);
+
+  // Uma alternativa é reagir à mudança de idUsuario para carregar as palestras:
+  useEffect(() => {
+    if (idUsuario !== null) {
+      carregarPalestras();
+    }
+  }, [idUsuario]);
 
   //Apenas para teste, deve ser apagado do codigo final
   useEffect(()=>{
