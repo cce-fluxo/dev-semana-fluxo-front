@@ -6,6 +6,7 @@ import OrangeButton from "../../../components/Button";
 import LogoHorizontalLaranja from "../../../components/LogoHorizontalLaranja";
 import { useRouter } from "next/navigation";
 import api from "@/app/services/axios";
+import withClient from "@/app/utils/withClient";
 
 type Palestra = {
   Data: string;
@@ -120,7 +121,6 @@ const PaginaCadastro: React.FC = () => {
   );
 };
 
-export default PaginaCadastro;
 
 //Faz a requisicao para o back e, caso tenha erro, mostra o erro na tela e depois redireciona para a tela inicial
 async function getPalestrasUsuario (id:number, router:any ){
@@ -133,3 +133,5 @@ async function getPalestrasUsuario (id:number, router:any ){
     router.push("/");
   }
 }
+
+export default withClient(PaginaCadastro);

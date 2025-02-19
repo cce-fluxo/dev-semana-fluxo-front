@@ -5,6 +5,7 @@ import api from "@/app/services/axios";
 import PaginaAtual from "@/components/PaginaAtual";
 import LoadPage from "@/components/LoadPage";
 import LogoHorizontalLaranja from "../../../components/LogoHorizontalLaranja";
+import withClient from "@/app/utils/withClient";
 
 
 
@@ -229,4 +230,4 @@ const Questionario: React.FC = () => {
   );
 };
 
-export default Questionario;
+export default withClient(Questionario);
