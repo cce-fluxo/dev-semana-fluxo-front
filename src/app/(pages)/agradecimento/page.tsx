@@ -9,7 +9,7 @@ import api from "@/app/services/axios";
 const PaginaPrincipal: React.FC = () => {
   const router = useRouter();
   const idUsuario = Number(localStorage.getItem("idUsuario"));
-  const rotaCronograma = "https://amazon.com";
+  const rotaCronograma = "https://dev-semana-fluxo-front.onrender.com/cronograma";
 
   const handleButtonClick = async () => {
 
