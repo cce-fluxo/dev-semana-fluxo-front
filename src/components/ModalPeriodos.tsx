@@ -33,7 +33,7 @@ const ModalPeriodos: React.FC<ModalPeriodosProps> = ({
                 onSelecionarPeriodo(periodo.toString());
                 onClose();
               }}
-              className={`w-full text-4xl p-6 text-left rounded-xl mb-4 ${
+              className={`w-full text-4xl p-6 text-left rounded-xl mb-4 text-black ${
                 periodo.toString() === periodoSelecionado
                   ? "bg-orange-500 text-white"
                   : "hover:bg-gray-100"

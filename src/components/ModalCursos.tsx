@@ -33,7 +33,7 @@ const ModalCursos: React.FC<ModalCursosProps> = ({
                 onSelecionarCurso(curso);
                 onClose();
               }}
-              className={`w-full text-4xl p-6 text-left rounded-xl mb-4 ${
+              className={`w-full text-4xl p-6 text-left rounded-xl mb-4 text-black ${
                 curso === cursoSelecionado
                   ? "bg-orange-500 text-white"
                   : "hover:bg-gray-100"
