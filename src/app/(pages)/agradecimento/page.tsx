@@ -11,6 +11,7 @@ const PaginaPrincipal: React.FC = () => {
   const router = useRouter();
   const idUsuario = Number(localStorage.getItem("idUsuario"));
   const rotaCronograma = `https://dev-semana-fluxo-front.onrender.com/print?idUsuario=${idUsuario}`;
+  const rotaPalestras = `https://dev-semana-fluxo-front.onrender.com/palestras-print`;
 
   const handleButtonClick = async () => {
 
@@ -39,7 +40,7 @@ const PaginaPrincipal: React.FC = () => {
       console.log("fui chamada");
       await api.post("/submit/enviar-email", {
         usuarioId: idUsuario,
-        rotaPrint: rotaCronograma
+        rotaPrint: [rotaCronograma, rotaPalestras]
       });
   
     } catch (error) {
