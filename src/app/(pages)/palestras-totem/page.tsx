@@ -114,7 +114,7 @@ const handleLectureChange = (dia: string, direction: 'next' | 'prev') => {
     // if (idUsuario !== null) {
       carregarPalestras();
     // }
-  }, [palestrasRecomendadas]);
+  }, []);
 
   //Apenas para teste, deve ser apagado do codigo final
 //   useEffect(()=>{
