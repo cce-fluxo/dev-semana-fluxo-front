@@ -10,7 +10,7 @@ import withClient from "@/app/utils/withClient";
 const PaginaPrincipal: React.FC = () => {
   const router = useRouter();
   const idUsuario = Number(localStorage.getItem("idUsuario"));
-  const rotaCronograma = `https://dev-semana-fluxo-front.onrender.com/cronograma?idUsuario=${idUsuario}`;
+  const rotaCronograma = `https://dev-semana-fluxo-front.onrender.com/print?idUsuario=${idUsuario}`;
 
   const handleButtonClick = async () => {
 
