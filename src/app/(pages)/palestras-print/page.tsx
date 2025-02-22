@@ -100,7 +100,7 @@ const groupedLectures = palestrasRecomendadas.reduce((acc: {[key: string]: Pales
     // if (idUsuario !== null) {
       carregarPalestras();
     // }
-  }, [palestrasRecomendadas]);
+  }, []);
 
   //Apenas para teste, deve ser apagado do codigo final
 //   useEffect(()=>{
